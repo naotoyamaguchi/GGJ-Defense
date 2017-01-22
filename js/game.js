@@ -24,11 +24,15 @@
     var tower = game.add.sprite(1,1, 'tower');
     tower.inputEnabled = true;
 
-    tower.events.onInputDown.add(clicked, this);
+    // tower.events.onInputDown.add(clicked, this);
 
     game.physics.enable(tower, Phaser.Physics.ARCADE);
     enemies = game.add.group();
+
     var grass = game.add.sprite(0.5, 0.5, 'grass');
+    grass.inputEnabled = true;
+    grass.events.onInputDown.add(clicked, this);
+
     var bg = game.add.sprite(0, 0, 'background');
     game.world.bringToTop(enemies);
     game.world.bringToTop(tower);
@@ -77,6 +81,9 @@
 
   function clicked(e){
     console.log(game.input._x, game.input._y);
+    let x = game.input._x - 33;
+    let y = game.input._y - 33;
+    let spawnTower = game.add.sprite(x, y, 'tower');
   }
 
   const update = _ => {
