@@ -56,19 +56,50 @@
           enemy.y += ENEMY_SPEED;
           enemy.angle = 90;
         }
-        if(enemy.y === 320 && enemy.x <= 445){
+        if(enemy.y === 320 && enemy.x <= 445 && enemy.x <= 500){
           enemy.x += ENEMY_SPEED;
           enemy.angle = 0;
         }
-        if(enemy.x === 445 && enemy.y >= 140){
+        if(enemy.x === 445 && enemy.y >= 140 && enemy.y <= 390){
           enemy.y -= ENEMY_SPEED;
           enemy.angle = -90;
         }
-        if(enemy.y === 140 && enemy.x <= 896 && enemy.x >= 390){
+        if(enemy.y === 140 && enemy.x <= 895 && enemy.x >= 390){
           enemy.x += ENEMY_SPEED;
           enemy.angle = 0;
         }
-
+        if(enemy.x === 895 && enemy.y <= 330){
+          enemy.y += ENEMY_SPEED;
+          enemy.angle = 90;
+        }
+        if(enemy.y === 330 && enemy.x >= 640){
+          enemy.x -= ENEMY_SPEED;
+          enemy.angle = 180;
+        }
+        if(enemy.x === 640 && enemy.y <= 455 && enemy.y >= 330){
+          enemy.y += ENEMY_SPEED;
+          enemy.angle = 90;
+        }
+        if(enemy.y === 455 && enemy.x >= 130){
+          enemy.x -= ENEMY_SPEED;
+          enemy.angle = 180;
+        }
+        if(enemy.x === 130 && enemy.y <= 645 && enemy.y >= 200){
+          enemy.y += ENEMY_SPEED;
+          enemy.angle = 90;
+        }
+        if(enemy.y === 645 && enemy.x <= 765){
+          enemy.x += ENEMY_SPEED;
+          enemy.angle = 0;
+        }
+        if(enemy.x === 765 && enemy.y >= 520){
+          enemy.y -= ENEMY_SPEED;
+          enemy.angle = -90;
+        }
+        if(enemy.y === 520 && enemy.x <= 1030 && enemy.x >= 715){
+          enemy.x += ENEMY_SPEED;
+          enemy.angle = 0;
+        }
     });
       //when enemy reaches x(500), console.log("holla")
       // enemies.children.forEach((testEnemy)=>{
