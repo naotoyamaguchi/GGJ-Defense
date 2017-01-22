@@ -1,3 +1,5 @@
+// jshint esversion: 6
+
 ((Phaser, Game) => {
   if(Game === undefined){
     Game = window.Game = {};
@@ -41,6 +43,6 @@
           tower.fireLastTime = game.time.now + tower.fireTime;
       }
     }
-  }
+  };
 
-})(window.Phaser, window.Game)
+})(window.Phaser, window.Game);

@@ -1,11 +1,16 @@
+// jshint esversion: 6
+
 (Phaser => {
   const GAME_WIDTH = 1024;
   const GAME_HEIGHT = 768;
   const ENEMY_SPAWN_FREQ = 50;
   const ENEMY_SPEED = 5;
+  const ENEMY_BULLET_ACCEL = 75;
+  const ENEMY_FIRE_FREQ = 100;
   const GAME_CONTAINER_ID = 'game';
   const GFX = 'gfx';
   let enemies;
+  let towerBullets;
   let towers;
   let canAddTower = true;
   let bulletsTowers, explosions, cursors, fireButton;
@@ -17,26 +22,35 @@
     game.load.image('tower', 'assets/png/towerDefense_tile203.png');
     game.load.image('background', '../td_path.png');
     game.load.image('plane', 'assets/png/towerDefense_tile271.png');
+    game.load.image('bullet', 'assets/png/towerDefense_tile298.png');
+
   };
 
   const create = _ => {
 
+    towerBullets = game.add.group();
+    towerBullets.enableBody = true;
+
     var tower = game.add.sprite(1,1, 'tower');
-    tower.inputEnabled = true;
+    towers = game.add.group();
+
+    var bullet = game.add.sprite(1,1, 'bullet');
 
     // tower.events.onInputDown.add(clicked, this);
 
     game.physics.enable(tower, Phaser.Physics.ARCADE);
+    game.physics.enable(bullet, Phaser.Physics.ARCADE);
+    game.physics.enable(towerBullets, Phaser.Physics.ARCADE);
     enemies = game.add.group();
 
     var grass = game.add.sprite(0.5, 0.5, 'grass');
     grass.inputEnabled = true;
-    grass.events.onInputDown.add(clicked, this);
+    grass.events.onInputDown.add(clicked);
 
     var bg = game.add.sprite(0, 0, 'background');
     game.world.bringToTop(enemies);
-    game.world.bringToTop(tower);
-
+    game.world.bringToTop(towers);
+    game.world.bringToTop(towerBullets);
   };
 
   const randomlySpawnEnemy = _ => {
@@ -46,6 +60,44 @@
       enemy.anchor.setTo(0.5, 0.5);
     }
   };
+
+
+  const randomTowerFire = tower => {
+    if( Math.floor(Math.random()*ENEMY_FIRE_FREQ) === 0 ){
+      let towerBullet = towerBullets.add(game.add.sprite(tower.x, tower.y, 'bullet'));
+      towerBullet.anchor.setTo(0.5, 0.5);
+
+
+
+
+
+      // tower.
+      // towerBullet.checkWorldBounds = true;
+      // towerBullet.outOfBoundsKill = true;
+      towerBullets.add( towerBullet );
+    }
+  };
+
+
+  const handleBulletAnimations = _ => {
+    towerBullets.children.forEach( bullet =>  {
+        game.physics.arcade.accelerateToObject(bullet, enemies, ENEMY_BULLET_ACCEL);
+    });
+  };
+
+  const handleTowerActions = _ => {
+      towers.children.forEach( enemy => randomTowerFire(enemy) );
+  };
+
+
+  
+  function clicked(e){
+    console.log(game.input._x, game.input._y);
+    let x = game.input._x;
+    let y = game.input._y;
+    let spawnTower = towers.add( game.add.image(x, y, 'tower') );
+    spawnTower.anchor.setTo(0.5, 0.5);
+  }
 
   const handleEnemyActions = _ => {
       enemies.children.forEach( enemy => {
@@ -101,25 +153,14 @@
           enemy.angle = 0;
         }
     });
-      //when enemy reaches x(500), console.log("holla")
-      // enemies.children.forEach((testEnemy)=>{
-      //   if(testEnemy.x === 400){
-      //     console.log("holla");
-      //   }
-      // });
 
   };
-
-  function clicked(e){
-    console.log(game.input._x, game.input._y);
-    let x = game.input._x - 33;
-    let y = game.input._y - 33;
-    let spawnTower = game.add.sprite(x, y, 'tower');
-  }
 
   const update = _ => {
     randomlySpawnEnemy();
     handleEnemyActions();
+    handleBulletAnimations();
+    handleTowerActions();
   };
 
 
